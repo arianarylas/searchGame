@@ -161,3 +161,47 @@ def visualize_grid(problem, explored, frontier, current, came_from):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
             pygame.quit()
             sys.exit(0)
+def visualize_water_jugs(problem, explored, frontier, current, came_from):
+    if not PYGAME_AVAILABLE:
+        return
+    screen = pygame.display.set_mode((500, 450))
+    screen.fill(COLORS['bg'])
+    font = pygame.font.SysFont(None, 26)
+    small = pygame.font.SysFont(None, 20)
+
+    j1, j2 = current
+
+    # Dimensions
+    jug1_rect = (100, 120, 100, 200)
+    jug2_rect = (280, 170, 100, 150)
+
+    # Outlines
+    pygame.draw.rect(screen, COLORS['grid'], jug1_rect, 3)
+    pygame.draw.rect(screen, COLORS['grid'], jug2_rect, 3)
+
+    # Water fills
+    fill1_h = int((j1 / 4.0) * 200)
+    fill2_h = int((j2 / 3.0) * 150)
+    water_color = (65, 145, 255)
+
+    if fill1_h > 0:
+        pygame.draw.rect(screen, water_color, (100 + 3, 120 + 200 - fill1_h, 100 - 6, fill1_h))
+    if fill2_h > 0:
+        pygame.draw.rect(screen, water_color, (280 + 3, 170 + 150 - fill2_h, 100 - 6, fill2_h))
+
+    # Text
+    screen.blit(font.render(f"4L Jug: {j1}L", True, COLORS['grid']), (100 + 10, 330))
+    screen.blit(font.render(f"3L Jug: {j2}L", True, COLORS['grid']), (280 + 10, 330))
+
+    info = f"State: {current} | Explored: {len(explored)} | Frontier: {len(frontier)}"
+    screen.blit(small.render(info, True, COLORS['grid']), (40, 370))
+
+    if problem.is_goal(current):
+        screen.blit(font.render("Goal reached: 2L in 4L jug!", True, (0, 150, 0)), (40, 400))
+
+    pygame.display.flip()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
+            pygame.quit()
+            sys.exit(0)

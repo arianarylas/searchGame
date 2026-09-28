@@ -130,3 +130,48 @@ class VacuumProblem(SearchProblem):
     def heuristic(self, state):
         _, dirty_a, dirty_b = state
         return dirty_a + dirty_b
+class WaterJugsProblem(SearchProblem):
+    def __init__(self):
+        # Capacities: 4L jug, 3L jug; Start: (0, 0)
+        self.start = (0, 0)
+        self.capacities = (4, 3)
+
+    def get_start_state(self):
+        return self.start
+
+    def is_goal(self, state):
+        # Goal: exactly 2L in the 4L jug
+        return state[0] == 2
+
+    def get_successors(self, state):
+        j1, j2 = state
+        cap1, cap2 = self.capacities
+        succ = []
+
+        # 1. Fill jugs
+        if j1 < cap1:
+            succ.append(((cap1, j2), "Fill 4L", 1))
+        if j2 < cap2:
+            succ.append(((j1, cap2), "Fill 3L", 1))
+
+        # 2. Empty jugs
+        if j1 > 0:
+            succ.append(((0, j2), "Empty 4L", 1))
+        if j2 > 0:
+            succ.append(((j1, 0), "Empty 3L", 1))
+
+        # 3. Pour 4L -> 3L
+        pour_to_3 = min(j1, cap2 - j2)
+        if pour_to_3 > 0:
+            succ.append(((j1 - pour_to_3, j2 + pour_to_3), "Pour 4L to 3L", 1))
+
+        # 4. Pour 3L -> 4L
+        pour_to_4 = min(j2, cap1 - j1)
+        if pour_to_4 > 0:
+            succ.append(((j1 + pour_to_4, j2 - pour_to_4), "Pour 3L to 4L", 1))
+
+        return succ
+
+    def heuristic(self, state):
+        # Admissible & consistent: 0 if at goal, 1 otherwise
+        return 0 if state[0] == 2 else 1
