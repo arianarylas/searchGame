@@ -171,15 +171,12 @@ def visualize_water_jugs(problem, explored, frontier, current, came_from):
 
     j1, j2 = current
 
-    # Dimensions
     jug1_rect = (100, 120, 100, 200)
     jug2_rect = (280, 170, 100, 150)
 
-    # Outlines
     pygame.draw.rect(screen, COLORS['grid'], jug1_rect, 3)
     pygame.draw.rect(screen, COLORS['grid'], jug2_rect, 3)
 
-    # Water fills
     fill1_h = int((j1 / 4.0) * 200)
     fill2_h = int((j2 / 3.0) * 150)
     water_color = (65, 145, 255)

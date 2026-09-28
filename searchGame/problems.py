@@ -2,6 +2,7 @@
 Defines the SearchProblem interface and problem formulations for:
 - Problem 1: Grid Pathfinding
 - Problem 2: Romania Map
+- Problem 5: Vaccum Worlds
 - Problem 6: Vacuum World (2 Rooms)
 """
 
@@ -34,7 +35,6 @@ class GridProblem(SearchProblem):
 
     def get_successors(self, state):
         x, y = state
-        # All 4 cardinal directions (up, down, left, right)
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         successors = []
         for dx, dy in directions:
@@ -105,7 +105,6 @@ class RomaniaProblem(SearchProblem):
 
 class VacuumProblem(SearchProblem):
     def __init__(self):
-        self.start = ('A', 1, 1)  # (robot_room, dirty_a, dirty_b)
 
     def get_start_state(self):
         return self.start
@@ -132,7 +131,6 @@ class VacuumProblem(SearchProblem):
         return dirty_a + dirty_b
 class WaterJugsProblem(SearchProblem):
     def __init__(self):
-        # Capacities: 4L jug, 3L jug; Start: (0, 0)
         self.start = (0, 0)
         self.capacities = (4, 3)
 
@@ -140,7 +138,6 @@ class WaterJugsProblem(SearchProblem):
         return self.start
 
     def is_goal(self, state):
-        # Goal: exactly 2L in the 4L jug
         return state[0] == 2
 
     def get_successors(self, state):
